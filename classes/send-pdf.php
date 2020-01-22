@@ -563,8 +563,38 @@ class cf7_sendpdf {
 
                 if(isset( $_POST['_wpcf7_groups_count'])){
                     //Executa função
-                    $text = print_r($_POST['_wpcf7_groups_count'], true);  
+                    preg_match_all('/(?<=\[).*?(?=__X\])/', $text, $campos);
+                    
+                    //Funciona, detecta os campos normalmente
+                    //$text = print_r($campos, true);
+                    $texto_dividido = explode("<!-- LOOP -->", $text);
+
+                    foreach($_POST['_wpcf7_groups_count'] as $group_id => $qtd_grupos){
+                        for($i = 0; $i < $qtd_grupos; $i++){
+                            $texto_loopavel[] = $texto_dividido[1];    
+                        }
+                    }
+
+                    for ( $i = 1; $i <= $qtd_grupos; $i++ ) {
+                        //Substitui cada campo identificado pra substituicao
+                        foreach($campos[0] as $campo_id => $campo){
+                            $texto_loopavel[$i-1] = str_replace('['.$campo.'__X]', '['.$campo.'__'.$i.']', $texto_loopavel[$i-1]);
+                        }
+                    }
+
+                    foreach ( $texto_loopavel as $repeticao) {
+                        //Se for o primeiro elemento, substitui, se nao, concatena
+                        if($repeticao == $texto_loopavel[0])
+                        {
+                            $texto_dividido[1] = $repeticao;
+                        }
+                        else { 
+                            $texto_dividido[1] .= $repeticao;
+                        }
+                    }
                 }
+
+                $text = implode("<!-- LOOP -->", $texto_dividido);
                
                 $text = str_replace('[date]', $dateField, $text);
                 $text = str_replace('[time]', $timeField, $text);
@@ -1257,45 +1287,6 @@ class cf7_sendpdf {
             return $csv_output;
         }
     }
-
-    function repeater_fields($texto, $qtd_grupos){
-        //Verifica se grupos de inputs foram enviados
-        preg_match_all('/(?<=\[).*?(?=__X\])/', $texto, $campos);
-
-        //Divide o texto na área de loop
-        $texto_dividido = explode("<!-- LOOP -->", $texto);
-
-        foreach ( $_POST['$_wpcf7_groups_count'] as $group_id => $group_sent_count ) {
-
-            //Acumula em um array a área de loop já repetida
-            for($i = 0; $i < $group_sent_count; $i++){
-                $texto_loopavel[] = $texto_dividido[1];    
-            }
-            
-            //Trata as tags e substitui com os indices
-            for ( $i = 1; $i <= $group_sent_count; $i++ ) {
-                //Substitui cada campo identificado pra substituicao
-                foreach($campos[0] as $campo_id => $campo){
-                    $texto_loopavel[$i-1] = str_replace('['.$campo.'__X]', '['.$campo.'__'.$i.']', $texto_loopavel[$i-1]);
-                }
-            }
-            
-            foreach ( $texto_loopavel as $repeticao) {
-                //Se for o primeiro elemento, substitui, se nao, concatena
-                if($repeticao == $texto_loopavel[0])
-                {
-                    $texto_dividido[1] = $repeticao;
-                }
-                else { 
-                    $texto_dividido[1] .= $repeticao;
-                }
-            }
-        }
-        
-        $texto = implode("<!-- LOOP -->", $texto_dividido);
-        
-        return $texto;
-    }
     
     function wpcf7_add_footer(){ 
     
@@ -1335,7 +1326,7 @@ class cf7_sendpdf {
                 }
                 $displayAddEventList = 1;
             }
-            
+
             // Redirection direct ver le pdf après envoi du formulaire
             if( isset($meta_values["redirect-to-pdf"]) && $meta_values["redirect-to-pdf"]=="true" ) {
 
