@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Send PDF for Contact Form 7
+Plugin Name: Send PDF for Contact Form 7 with Repeatable Fiedls
 Plugin URI:  https://restezconnectes.fr/tutoriel-wordpress-lextension-send-pdf-for-contact-form-7/
-Description: Send a PDF with Contact Form 7. It is originally created for Contact Form 7 plugin.
+Description: Modified version to support repeatable fields on form-generated PDFs 
 Version:     0.1.5
 Author:      Alexandre Porto Alegre
 License:     GPL3 or later
