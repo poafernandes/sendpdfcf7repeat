@@ -3,13 +3,12 @@
 Plugin Name: Send PDF for Contact Form 7
 Plugin URI:  https://restezconnectes.fr/tutoriel-wordpress-lextension-send-pdf-for-contact-form-7/
 Description: Send a PDF with Contact Form 7. It is originally created for Contact Form 7 plugin.
-Version:     0.7.9.1
-Author:      Florent Maillefaud
-Author URI:  https://restezconnectes.fr
+Version:     0.1.5
+Author:      Alexandre Porto Alegre
 License:     GPL3 or later
 Domain Path: /languages
-Text Domain: send-pdf-for-contact-form-7
-GitHub Plugin URI: https://github.com/Florent73/send-pdf-for-contact-form-7
+Text Domain: sendpdfcf7repeat
+GitHub Plugin URI: https://github.com/poafernandes/sendpdfcf7repeat
 */
 
 /*  Copyright 2007-2015 Florent Maillefaud (email: contact at restezconnectes.fr)
